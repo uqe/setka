@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useInView } from 'react-intersection-observer'
-// import PropTypes from 'prop-types'
 
 interface Props {
   text: string
@@ -93,26 +92,14 @@ export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
   }, [isTooltipVisible])
 
   return (
-    <>
-      <TooltipWrapper
-        onFocus={showTooltip}
-        onBlur={closeTooltip}
-        onMouseEnter={showTooltip}
-        onMouseLeave={closeTooltip}
-      >
-        <Text ref={ref} style={tooltipPosition} position={position} isTooltipVisible={isTooltipVisible}>
-          {text}
-        </Text>
-        {children}
-      </TooltipWrapper>
-    </>
+    <TooltipWrapper onFocus={showTooltip} onBlur={closeTooltip} onMouseEnter={showTooltip} onMouseLeave={closeTooltip}>
+      <Text ref={ref} style={tooltipPosition} position={position} isTooltipVisible={isTooltipVisible}>
+        {text}
+      </Text>
+      {children}
+    </TooltipWrapper>
   )
 }
-
-// Tooltip.propTypes = {
-//   text: PropTypes.string.isRequired,
-//   position: PropTypes.oneOf(['top', 'right', 'bottom', 'left']),
-// }
 
 Tooltip.defaultProps = {
   position: 'bottom',
