@@ -8,22 +8,36 @@ interface Props {
   children: React.ReactNode
 }
 
-interface TextProps {
-  isTooltipVisible: boolean
-  position?: 'top' | 'right' | 'bottom' | 'left'
-}
-
 const TooltipWrapper = styled.div`
   position: relative;
   cursor: pointer;
   justify-content: center;
   display: flex;
+  transition: opacity 0.25s linear;
+
+  > span {
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  :hover {
+    > span {
+      visibility: visible;
+      opacity: 0.95;
+    }
+  }
+
+  :focus {
+    > span {
+      visibility: visible;
+      opacity: 0.95;
+    }
+  }
 `
 
-const Text = styled.span<TextProps>`
+const Text = styled.span`
   display: block;
-  opacity: 0;
-  visibility: ${({ isTooltipVisible }) => (isTooltipVisible ? 'visible' : 'hidden')};
+  transition: visibility 0.25s ease-out, opacity 0.25s ease-out;
   background: var(--main-bg-color);
   border-radius: 8px;
   color: var(--main-color);
@@ -40,17 +54,11 @@ const Text = styled.span<TextProps>`
 export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
   const setTextPosition = (inView: boolean, position: string): React.CSSProperties => {
     switch (position) {
-      case 'bottom':
-        return {
-          opacity: 1,
-        }
-        break
       case 'top':
         return {
           bottom: '100%',
           top: 'unset',
           marginBottom: '18px',
-          opacity: 1,
         }
         break
       case 'right':
@@ -60,7 +68,6 @@ export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
           transform: 'translateY(-50%)',
           marginTop: 'unset',
           marginLeft: inView ? '18px' : 'unset',
-          opacity: 1,
         }
         break
       case 'left':
@@ -71,9 +78,9 @@ export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
           left: 'unset',
           transform: 'translateY(-50%)',
           marginRight: '18px',
-          opacity: 1,
         }
         break
+      case 'bottom':
       default:
         break
     }
@@ -92,8 +99,8 @@ export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
   }, [isTooltipVisible])
 
   return (
-    <TooltipWrapper onFocus={showTooltip} onBlur={closeTooltip} onMouseEnter={showTooltip} onMouseLeave={closeTooltip}>
-      <Text ref={ref} style={tooltipPosition} position={position} isTooltipVisible={isTooltipVisible}>
+    <TooltipWrapper onFocus={showTooltip} onBlur={closeTooltip} onMouseOver={showTooltip} onMouseLeave={closeTooltip}>
+      <Text ref={ref} style={tooltipPosition}>
         {text}
       </Text>
       {children}
