@@ -52,7 +52,7 @@ const Text = styled.span`
 `
 
 export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
-  const setTextPosition = (inView: boolean, position: string): React.CSSProperties => {
+  const getTooltipTextStyle = (inView: boolean, position: string): React.CSSProperties => {
     switch (position) {
       case 'top':
         return {
@@ -88,14 +88,14 @@ export const Tooltip: React.FC<Props> = ({ children, text, position }) => {
 
   const [ref, inView] = useInView({ threshold: 1 })
   const [isTooltipVisible, setTooltipVisible] = useState(false)
-  const [tooltipPosition, setTooltipPosition] = useState(setTextPosition(inView, position))
+  const [tooltipPosition, setTooltipPosition] = useState(getTooltipTextStyle(inView, position))
 
   const showTooltip = (): void => setTooltipVisible(true)
 
   const closeTooltip = (): void => setTooltipVisible(false)
 
   useEffect(() => {
-    setTooltipPosition(setTextPosition(inView, position))
+    setTooltipPosition(getTooltipTextStyle(inView, position))
   }, [isTooltipVisible])
 
   return (
